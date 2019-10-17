@@ -16,6 +16,12 @@ A demo called: demo_userinput is available. It imports the class cron_parser and
 
 it will then output a table containing minute, hour, day and month information in regards to when the job will be run.
 
+## Installation
+  pip3 install -r python/requirements.txt
+  
+## Example usange
+
+  python demo_userinput.py
 
 ### future work
 
