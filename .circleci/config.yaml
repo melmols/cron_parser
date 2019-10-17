@@ -1,1 +1,82 @@
+version: 2
+jobs:
+  build:
+    docker: buildpack-deps:trusty
 
+    environment:
+      TEST_REPORTS: /tmp/test-reports
+
+    working_directory: ~/cron_parser
+
+    steps:
+      - checkout
+
+      - run:
+          command: 
+
+    
+      - run:
+          environment:
+            SSH_TARGET: "localhost"
+            TEST_ENV: "linux"
+          command: |
+            set -xu
+            mkdir -p ${TEST_REPORTS}
+            'testing files here'
+
+      - run: |
+          set -xu
+          mkdir -p /tmp/artifacts
+          create_jars.sh ${CIRCLE_BUILD_NUM}
+          cp *.jar /tmp/artifacts
+
+
+      # Save artifacts
+      - store_artifacts:
+          path: /tmp/artifacts
+          destination: build
+
+      # Upload test results
+      - store_test_results:
+          path: /tmp/test-reports
+
+  deploy-stage:
+    docker:
+      - image: ubuntu:14.04
+    working_directory: /tmp/cron_parser
+    steps:
+      - run:
+          name: Deploy if tests pass and branch is Staging
+          command: 
+
+  deploy-prod:
+    docker:
+      - image: ubuntu:14.04
+    working_directory: /tmp/cron_parser
+    steps:
+      - run:
+          name: 
+          command: 
+          
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore:
+                - develop
+                - /feature-.*/
+      - deploy-stage:
+          requires:
+            - build
+          filters:
+            branches:
+              only: staging
+      - deploy-prod:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
